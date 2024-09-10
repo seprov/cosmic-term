@@ -3,7 +3,7 @@ use cosmic::{
     iced::{keyboard::Modifiers, mouse::Button, Event},
 };
 
-use crate::terminal::Terminal;
+use crate::terminal::terminal::Terminal;
 
 const SCROLL_SPEED: u32 = 3;
 

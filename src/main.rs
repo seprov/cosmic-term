@@ -58,7 +58,7 @@ mod localization;
 use menu::menu_bar;
 mod menu;
 
-use terminal::{Terminal, TerminalPaneGrid, TerminalScroll};
+use crate::terminal::terminal::{Terminal, TerminalPaneGrid, TerminalScroll};
 mod terminal;
 
 use crate::dnd::DndDrop;
@@ -501,7 +501,7 @@ impl App {
                 | (u32::from(bytes[1]) << 8)
                 | (u32::from(bytes[0]) << 16)
                 | 0xFF000000;
-            terminal::WINDOW_BG_COLOR.store(data, Ordering::SeqCst);
+            terminal::constants::WINDOW_BG_COLOR.store(data, Ordering::SeqCst);
         }
 
         // Set config of all tabs

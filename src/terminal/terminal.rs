@@ -29,10 +29,7 @@ use std::{
     borrow::Cow,
     collections::HashMap,
     io, mem,
-    sync::{
-        atomic::{AtomicU32, Ordering},
-        Arc, Weak,
-    },
+    sync::{atomic::Ordering, Arc, Weak},
     time::Instant,
 };
 use tokio::sync::mpsc;
@@ -43,6 +40,8 @@ use crate::{
     config::{color_scheme::ColorSchemeKind, config::Config as AppConfig, profile::ProfileId},
     mouse_reporter::MouseReporter,
 };
+
+use super::{constants::WINDOW_BG_COLOR, metadata::Metadata};
 
 /// Minimum contrast between a fixed cursor color and the cell's background.
 /// Duplicated from alacritty
@@ -109,8 +108,6 @@ fn as_dim(mut color: Color) -> Color {
     color
 }
 
-pub static WINDOW_BG_COLOR: AtomicU32 = AtomicU32::new(0xFF000000);
-
 fn convert_color(colors: &Colors, color: Color) -> cosmic_text::Color {
     let rgb = match color {
         Color::Named(named_color) => match colors[named_color] {
@@ -163,35 +160,6 @@ impl TerminalPaneGrid {
     }
     pub fn active_mut(&mut self) -> Option<&mut TabModel> {
         self.panes.get_mut(self.focus)
-    }
-}
-
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
-pub struct Metadata {
-    pub bg: cosmic_text::Color,
-    pub underline_color: cosmic_text::Color,
-    pub flags: Flags,
-}
-
-impl Metadata {
-    fn new(bg: cosmic_text::Color, underline_color: cosmic_text::Color) -> Self {
-        let flags = Flags::empty();
-        Self {
-            bg,
-            underline_color,
-            flags,
-        }
-    }
-
-    fn with_underline_color(self, underline_color: cosmic_text::Color) -> Self {
-        Self {
-            underline_color,
-            ..self
-        }
-    }
-
-    fn with_flags(self, flags: Flags) -> Self {
-        Self { flags, ..self }
     }
 }
 

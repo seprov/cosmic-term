@@ -4,7 +4,6 @@ use cosmic::widget::menu::key_bind::KeyBind;
 use cosmic::{
     iced::{
         event::{Event, Status},
-        keyboard::Modifiers,
         mouse::{self},
         Element, Length, Padding, Point, Rectangle, Size,
     },
@@ -14,7 +13,7 @@ use cosmic::{
         renderer::{self},
         widget::{
             self,
-            operation::{self, Operation, OperationOutputWrapper},
+            operation::{Operation, OperationOutputWrapper},
             tree, Id, Widget,
         },
         Border, Shell,
@@ -23,15 +22,12 @@ use cosmic::{
     Renderer,
 };
 
-use std::{
-    cell::Cell,
-    collections::HashMap,
-    sync::Mutex,
-    time::{Duration, Instant},
-};
+use std::{collections::HashMap, sync::Mutex, time::Duration};
 
 use crate::{key_bind::key_binds, Action, Terminal};
 
+use super::enums::Dragging;
+use super::state::State;
 use super::{drawer, event_handler};
 
 pub struct TerminalBox<'a, Message> {
@@ -277,56 +273,5 @@ where
 {
     fn from(terminal_box: TerminalBox<'a, Message>) -> Self {
         Self::new(terminal_box)
-    }
-}
-
-pub(super) enum ClickKind {
-    Single,
-    Double,
-    Triple,
-}
-
-pub(super) enum Dragging {
-    Buffer,
-    Scrollbar {
-        start_y: f32,
-        start_scroll: (f32, f32),
-    },
-}
-
-pub struct State {
-    pub(super) modifiers: Modifiers,
-    pub(super) click: Option<(ClickKind, Instant)>,
-    pub(super) dragging: Option<Dragging>,
-    pub(super) is_focused: bool,
-    pub(super) scroll_pixels: f32,
-    pub(super) scrollbar_rect: Cell<Rectangle<f32>>,
-}
-
-impl State {
-    /// Creates a new [`State`].
-    pub fn new() -> Self {
-        Self {
-            modifiers: Modifiers::empty(),
-            click: None,
-            dragging: None,
-            is_focused: false,
-            scroll_pixels: 0.0,
-            scrollbar_rect: Cell::new(Rectangle::default()),
-        }
-    }
-}
-
-impl operation::Focusable for State {
-    fn is_focused(&self) -> bool {
-        self.is_focused
-    }
-
-    fn focus(&mut self) {
-        self.is_focused = true;
-    }
-
-    fn unfocus(&mut self) {
-        self.is_focused = false;
     }
 }

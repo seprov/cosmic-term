@@ -24,8 +24,8 @@ use indexmap::IndexSet;
 use std::{array, cmp, time::Instant};
 
 use crate::{
-    terminal::Metadata,
-    terminal_box::terminal_box::{Dragging, State},
+    terminal::metadata::Metadata,
+    terminal_box::{enums::Dragging, state::State},
 };
 
 use super::terminal_box::TerminalBox;

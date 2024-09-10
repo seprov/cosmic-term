@@ -20,7 +20,11 @@ use std::time::Instant;
 
 use crate::TerminalScroll;
 
-use super::terminal_box::{ClickKind, Dragging, State, TerminalBox};
+use super::{
+    enums::{ClickKind, Dragging},
+    state::State,
+    terminal_box::TerminalBox,
+};
 
 pub(super) fn handle_event<'a, Message>(
     terminal_box: &mut TerminalBox<'a, Message>,
