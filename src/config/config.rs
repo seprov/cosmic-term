@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-use cosmic::{
-    cosmic_config::{self, cosmic_config_derive::CosmicConfigEntry, CosmicConfigEntry},
-    theme,
-};
+use cosmic::cosmic_config::{self, cosmic_config_derive::CosmicConfigEntry, CosmicConfigEntry};
 use cosmic_text::{Metrics, Stretch, Weight};
 use hex_color::HexColor;
 use serde::{Deserialize, Serialize};
@@ -11,34 +8,13 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::sync::OnceLock;
 
-use crate::{fl, localize::LANGUAGE_SORTER};
+use crate::localization::LANGUAGE_SORTER;
 
-use super::constants::{COSMIC_THEME_DARK, COSMIC_THEME_LIGHT};
-
-#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-pub enum AppTheme {
-    Dark,
-    Light,
-    System,
-}
-
-impl AppTheme {
-    pub fn theme(&self) -> theme::Theme {
-        match self {
-            Self::Dark => {
-                let mut t = theme::system_dark();
-                t.theme_type.prefer_dark(Some(true));
-                t
-            }
-            Self::Light => {
-                let mut t = theme::system_light();
-                t.theme_type.prefer_dark(Some(false));
-                t
-            }
-            Self::System => theme::system_preference(),
-        }
-    }
-}
+use super::{
+    app_theme::AppTheme,
+    constants::{COSMIC_THEME_DARK, COSMIC_THEME_LIGHT},
+    profile::{Profile, ProfileId},
+};
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
 pub enum ColorSchemeKind {
@@ -179,41 +155,6 @@ pub struct ColorScheme {
     pub dim: ColorSchemeAnsi,
 }
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
-#[serde(transparent)]
-pub struct ProfileId(pub u64);
-
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
-pub struct Profile {
-    pub name: String,
-    #[serde(default)]
-    pub command: String,
-    #[serde(default)]
-    pub syntax_theme_dark: String,
-    #[serde(default)]
-    pub syntax_theme_light: String,
-    #[serde(default)]
-    pub tab_title: String,
-    #[serde(default)]
-    pub working_directory: String,
-    #[serde(default)]
-    pub hold: bool,
-}
-
-impl Default for Profile {
-    fn default() -> Self {
-        Self {
-            name: fl!("new-profile"),
-            command: String::new(),
-            syntax_theme_dark: COSMIC_THEME_DARK.to_string(),
-            syntax_theme_light: COSMIC_THEME_LIGHT.to_string(),
-            tab_title: String::new(),
-            working_directory: String::new(),
-            hold: false,
-        }
-    }
-}
-
 #[derive(Clone, CosmicConfigEntry, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct Config {
     pub app_theme: AppTheme,
@@ -283,7 +224,7 @@ impl Config {
     }
 
     pub fn color_scheme_kind(&self) -> ColorSchemeKind {
-        if self.app_theme.theme().theme_type.is_dark() {
+        if self.app_theme.map_to_cosmic_theme().theme_type.is_dark() {
             ColorSchemeKind::Dark
         } else {
             ColorSchemeKind::Light

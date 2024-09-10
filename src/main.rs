@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 use alacritty_terminal::{event::Event as TermEvent, term, term::color::Colors as TermColors, tty};
-use config::config::{
-    AppTheme, ColorScheme, ColorSchemeId, ColorSchemeKind, Config, Profile, ProfileId,
-};
+use config::app_theme::AppTheme;
+use config::config::{ColorScheme, ColorSchemeId, ColorSchemeKind, Config};
 use config::constants::{CONFIG_VERSION, COSMIC_THEME_LIGHT};
+use config::profile::{Profile, ProfileId};
 use cosmic::iced::clipboard::dnd::DndAction;
 use cosmic::widget::menu::action::MenuAction;
 use cosmic::widget::menu::key_bind::KeyBind;
@@ -31,7 +31,7 @@ use cosmic::{
 };
 use cosmic_files::dialog::{Dialog, DialogKind, DialogMessage, DialogResult};
 use cosmic_text::{fontdb::FaceInfo, Family, Stretch, Weight};
-use localize::LANGUAGE_SORTER;
+use localization::LANGUAGE_SORTER;
 use std::{
     any::TypeId,
     cmp,
@@ -50,7 +50,7 @@ mod icon_cache;
 use key_bind::key_binds;
 mod key_bind;
 
-mod localize;
+mod localization;
 
 use menu::menu_bar;
 mod menu;
@@ -119,7 +119,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("warn")).init();
 
-    localize::localize();
+    localization::localize();
 
     let (config_handler, config) = match cosmic_config::Config::new(App::APP_ID, CONFIG_VERSION) {
         Ok(config_handler) => {
@@ -155,7 +155,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     env::set_var("TERM", "xterm-256color");
 
     let mut settings = Settings::default();
-    settings = settings.theme(config.app_theme.theme());
+    settings = settings.theme(config.app_theme.map_to_cosmic_theme());
     settings = settings.size_limits(Limits::NONE.min_width(360.0).min_height(180.0));
 
     let flags = Flags {
@@ -488,7 +488,7 @@ impl App {
     }
 
     fn update_config(&mut self) -> Command<Message> {
-        let theme = self.config.app_theme.theme();
+        let theme = self.config.app_theme.map_to_cosmic_theme();
 
         // Update color schemes
         self.update_color_schemes();
