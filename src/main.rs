@@ -3,7 +3,8 @@
 
 use alacritty_terminal::{event::Event as TermEvent, term, term::color::Colors as TermColors, tty};
 use config::app_theme::AppTheme;
-use config::config::{ColorScheme, ColorSchemeId, ColorSchemeKind, Config};
+use config::color_scheme::{ColorScheme, ColorSchemeId, ColorSchemeKind};
+use config::config::Config;
 use config::constants::{CONFIG_VERSION, COSMIC_THEME_LIGHT};
 use config::profile::{Profile, ProfileId};
 use cosmic::iced::clipboard::dnd::DndAction;
