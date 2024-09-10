@@ -40,10 +40,12 @@ use std::{
     env, fs, process,
     sync::{atomic::Ordering, Mutex},
 };
+use terminal_box::terminal_box::terminal_box;
 use tokio::sync::mpsc;
 
 mod config;
 mod mouse_reporter;
+mod terminal_box;
 
 use icon_cache::IconCache;
 mod icon_cache;
@@ -59,10 +61,7 @@ mod menu;
 use terminal::{Terminal, TerminalPaneGrid, TerminalScroll};
 mod terminal;
 
-use terminal_box::terminal_box;
-
 use crate::dnd::DndDrop;
-mod terminal_box;
 
 mod terminal_theme;
 
