@@ -6,10 +6,8 @@ use hex_color::HexColor;
 use palette::{encoding::Srgb, rgb::Rgb as PRgb, FromColor, Okhsl};
 use std::{collections::HashMap, fs};
 
-use crate::config::{
-    ColorScheme, ColorSchemeAnsi, ColorSchemeKind, COSMIC_THEME_DARK, COSMIC_THEME_LIGHT,
-};
-
+use crate::config::config::{ColorScheme, ColorSchemeAnsi, ColorSchemeKind};
+use crate::config::constants::{COSMIC_THEME_DARK, COSMIC_THEME_LIGHT};
 // Fill missing dim/bright colors with derived values from normal ones.
 #[allow(dead_code)]
 struct ColorDerive {

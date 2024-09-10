@@ -2,6 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 use alacritty_terminal::{event::Event as TermEvent, term, term::color::Colors as TermColors, tty};
+use config::config::{
+    AppTheme, ColorScheme, ColorSchemeId, ColorSchemeKind, Config, Profile, ProfileId,
+};
+use config::constants::{CONFIG_VERSION, COSMIC_THEME_LIGHT};
 use cosmic::iced::clipboard::dnd::DndAction;
 use cosmic::widget::menu::action::MenuAction;
 use cosmic::widget::menu::key_bind::KeyBind;
@@ -37,10 +41,6 @@ use std::{
 };
 use tokio::sync::mpsc;
 
-use config::{
-    AppTheme, ColorScheme, ColorSchemeId, ColorSchemeKind, Config, Profile, ProfileId,
-    CONFIG_VERSION,
-};
 mod config;
 mod mouse_reporter;
 
@@ -1226,13 +1226,13 @@ impl App {
                     .themes
                     .get(&self.config.syntax_theme(profile_id_opt))
                     .or_else(|| match self.config.color_scheme_kind() {
-                        ColorSchemeKind::Dark => self
-                            .themes
-                            .get(&(config::COSMIC_THEME_DARK.to_string(), ColorSchemeKind::Dark)),
-                        ColorSchemeKind::Light => self.themes.get(&(
-                            config::COSMIC_THEME_LIGHT.to_string(),
-                            ColorSchemeKind::Light,
+                        ColorSchemeKind::Dark => self.themes.get(&(
+                            config::constants::COSMIC_THEME_DARK.to_string(),
+                            ColorSchemeKind::Dark,
                         )),
+                        ColorSchemeKind::Light => self
+                            .themes
+                            .get(&(COSMIC_THEME_LIGHT.to_string(), ColorSchemeKind::Light)),
                     });
                 match colors {
                     Some(colors) => {

@@ -40,7 +40,7 @@ use tokio::sync::mpsc;
 pub use alacritty_terminal::grid::Scroll as TerminalScroll;
 
 use crate::{
-    config::{ColorSchemeKind, Config as AppConfig, ProfileId},
+    config::config::{ColorSchemeKind, Config as AppConfig, ProfileId},
     mouse_reporter::MouseReporter,
 };
 
