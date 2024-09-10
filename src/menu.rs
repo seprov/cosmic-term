@@ -18,7 +18,9 @@ use cosmic::{
 };
 use std::collections::HashMap;
 
-use crate::{fl, Action, ColorSchemeId, ColorSchemeKind, Config, Message};
+use crate::app::action::Action;
+use crate::app::message::Message;
+use crate::{fl, ColorSchemeId, ColorSchemeKind, Config};
 
 pub fn context_menu<'a>(
     config: &Config,

@@ -24,11 +24,12 @@ use cosmic::{
 
 use std::{collections::HashMap, sync::Mutex, time::Duration};
 
-use crate::{key_bind::key_binds, Action, Terminal};
-
 use super::enums::Dragging;
 use super::state::State;
 use super::{drawer, event_handler};
+
+use crate::app::action::Action;
+use crate::{key_bind::key_binds, Terminal};
 
 pub struct TerminalBox<'a, Message> {
     pub(super) terminal: &'a Mutex<Terminal>,

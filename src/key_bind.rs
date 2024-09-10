@@ -2,7 +2,7 @@ use cosmic::widget::menu::key_bind::{KeyBind, Modifier};
 use cosmic::{iced::keyboard::Key, iced_core::keyboard::key::Named};
 use std::collections::HashMap;
 
-use crate::Action;
+use crate::app::action::Action;
 
 //TODO: load from config
 pub fn key_binds() -> HashMap<KeyBind, Action> {
