@@ -55,12 +55,12 @@ macro_rules! fl {
 }
 
 // Get the `Localizer` to be used for localizing this library.
-pub fn localizer() -> Box<dyn Localizer> {
+pub fn get_localizer() -> Box<dyn Localizer> {
     Box::from(DefaultLocalizer::new(&*LANGUAGE_LOADER, &Localizations))
 }
 
 pub fn localize() {
-    let localizer = localizer();
+    let localizer = get_localizer();
     let requested_languages = i18n_embed::DesktopLanguageRequester::requested_languages();
 
     if let Err(error) = localizer.select(&requested_languages) {
